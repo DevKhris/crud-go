@@ -4,14 +4,44 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
+
+// variable that stores current opt
+var opt string // **
 
 // declare reader as a pointer from bufio
 var reader *bufio.Reader
 
+type User struct {
+	id       int
+	username string
+	email    string
+	age      int
+}
+
+var id int
+var users map[int]User
+
 func createUser() {
+	fmt.Print("Insert value for username: ")
+	username := readLine(opt)
+	fmt.Print("Insert value for email: ")
+	email := readLine(opt)
+	fmt.Print("Insert value for age: ")
+	age, err := strconv.Atoi(readLine(opt))
+
+	if err != nil {
+		panic("Unable to convert from string to int")
+	}
+
 	fmt.Println("User created succesfully")
+
+	id++
+	user := User{username: username, email: email, age: age}
+	users[id] = user
+
 }
 
 func readUser() {
@@ -42,7 +72,8 @@ func readLine(option string) string {
 }
 
 func main() {
-	var opt string // **
+
+	users = make(map[int]User)
 
 	// Define a buffer to read from standard input
 	reader = bufio.NewReader(os.Stdin)

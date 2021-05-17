@@ -46,30 +46,36 @@ func main() {
 
 	// Define a buffer to read from standard input
 	reader = bufio.NewReader(os.Stdin)
+	for {
+		if opt == "quit" || opt == "q" || opt == "^C" {
+			break
+		}
 
-	// Print options
-	fmt.Println("A) Create")
-	fmt.Println("B) Read")
-	fmt.Println("C) Update")
-	fmt.Println("D) Delete")
+		// Print options
+		fmt.Println("A) Create")
+		fmt.Println("B) Read")
+		fmt.Println("C) Update")
+		fmt.Println("D) Delete")
 
-	// print and read input from line
-	fmt.Print("Select a option to continue: ")
+		// print and read input from line
+		fmt.Print("Select a option to continue: ")
 
-	// Pass option to readline and return value
-	opt = readLine(opt)
+		// Pass option to readline and return value
+		opt = readLine(opt)
 
-	switch opt {
-	case "a", "create":
-		createUser()
-	case "b", "read":
-		readUser()
-	case "c", "update":
-		updateUser()
-	case "d", "delete":
-		deleteUser()
-	default:
-		fmt.Println("Invalid Option")
+		switch opt {
+		case "a", "create":
+			createUser()
+		case "b", "read":
+			readUser()
+		case "c", "update":
+			updateUser()
+		case "d", "delete":
+			deleteUser()
+		default:
+			fmt.Println("Invalid Option")
+		}
+
 	}
-
+	fmt.Println("Closing...")
 }

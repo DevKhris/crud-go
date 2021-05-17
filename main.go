@@ -21,31 +21,40 @@ type User struct {
 	age      int
 }
 
-var id int
+var id int = 0
 var users map[int]User
 
 func createUser() {
 	fmt.Print("Insert value for username: ")
+
 	username := readLine(opt)
+
 	fmt.Print("Insert value for email: ")
 	email := readLine(opt)
+
 	fmt.Print("Insert value for age: ")
+
+	// convert string to int and assign err if ocurrs
 	age, err := strconv.Atoi(readLine(opt))
 
 	if err != nil {
+		// throw the error
 		panic("Unable to convert from string to int")
 	}
 
-	fmt.Println("User created succesfully")
-
-	id++
 	user := User{username: username, email: email, age: age}
+	id++
 	users[id] = user
 
+	fmt.Println(users[id])
+	fmt.Println("User created succesfully")
 }
 
 func readUser() {
-	fmt.Println("User list:")
+	fmt.Println("Current User list:")
+	for id, user := range users {
+		fmt.Println(id, " - ", user.username)
+	}
 }
 
 func updateUser() {

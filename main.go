@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -25,6 +26,11 @@ var id int = 0
 var users map[int]User
 
 func createUser() {
+
+	clearLine()
+
+	// read values for creating user
+
 	fmt.Print("Insert value for username: ")
 
 	username := readLine(opt)
@@ -39,30 +45,91 @@ func createUser() {
 
 	if err != nil {
 		// throw the error
-		panic("Unable to convert from string to int")
+		panic("[Error] Unable to convert from string to int")
 	}
 
 	user := User{username: username, email: email, age: age}
 	id++
 	users[id] = user
 
-	fmt.Println(users[id])
-	fmt.Println("User created succesfully")
+	fmt.Println("[+] User data: ", users[id])
+	fmt.Println("[+] User created succesfully")
 }
 
 func readUser() {
-	fmt.Println("Current User list:")
+	clearLine()
+
+	fmt.Println("[+] Current User list:")
+
+	// loops into every user in range and prints that user
+	fmt.Println("[-] ***Id***|***Username***|***Email***|***Age***")
 	for id, user := range users {
-		fmt.Println(id, " - ", user.username)
+		fmt.Println(
+			"[*]",
+			id, " - ",
+			user.username,
+			"/",
+			user.email,
+			" : ",
+			user.age)
 	}
 }
 
 func updateUser() {
-	fmt.Println("Updated user")
+	fmt.Print("Input the user id to update: ")
+	id, err := strconv.Atoi(readLine(opt))
+
+	if err != nil {
+		panic("[Error] Unable to convert from string to int")
+	}
+
+	if _, ok := users[id]; ok {
+
+		fmt.Print("Insert value for username: ")
+
+		username := readLine(opt)
+
+		fmt.Print("Insert value for email: ")
+		email := readLine(opt)
+
+		fmt.Print("Insert value for age: ")
+
+		// convert string to int and assign err if ocurrs
+		age, err := strconv.Atoi(readLine(opt))
+
+		if err != nil {
+			// throw the error
+			panic("[Error] Unable to convert from string to int")
+		}
+
+		user := users[id]
+
+		user.username = username
+		user.email = email
+		user.age = age
+
+		users[id] = user
+
+		fmt.Println("[+] User was updated succesfully")
+	}
 }
 
 func deleteUser() {
-	fmt.Println("Deleted user")
+	clearLine()
+	fmt.Print("Input the user id to delete: ")
+	id, err := strconv.Atoi(readLine(opt))
+
+	if err != nil {
+		panic("[Error] Unable to convert from string to int")
+	}
+
+	// if user by id is found
+	if _, ok := users[id]; ok {
+		// delete user
+		delete(users, id)
+
+	}
+	fmt.Println("[+] Deleted user succesfully")
 }
 
 /**
@@ -80,8 +147,19 @@ func readLine(option string) string {
 	}
 }
 
-func main() {
+/**
 
+	Clear console
+
+**/
+func clearLine() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+func main() {
+	clearLine()
 	users = make(map[int]User)
 
 	// Define a buffer to read from standard input
@@ -90,7 +168,6 @@ func main() {
 		if opt == "quit" || opt == "q" || opt == "^C" {
 			break
 		}
-
 		// Print options
 		fmt.Println("A) Create")
 		fmt.Println("B) Read")
